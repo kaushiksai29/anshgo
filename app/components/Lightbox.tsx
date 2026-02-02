@@ -118,44 +118,45 @@ export default function Lightbox({ project, onClose, onNext, onPrev, hasNext, ha
                 onClick={(e) => e.stopPropagation()}
             >
                 {project.videoUrl ? (
-                    <ReactPlayer
-                        url={project.videoUrl}
-                        width="100%"
-                        height="100%"
-                        controls
-                        playing
-                        config={{
-                            file: {
-                                forceHLS: true,
-                            }
-                        } as any}
-                    />
+                    <div className="w-full aspect-video rounded overflow-hidden shadow-2xl relative bg-black">
+                        <ReactPlayer
+                            url={project.videoUrl}
+                            width="100%"
+                            height="100%"
+                            controls
+                            playing
+                            config={{
+                                file: {
+                                    forceHLS: true,
+                                }
+                            } as any}
+                        />
                     </div>
-            ) : (
-            <img
-                src={project.img}
-                alt={project.title}
-                className="w-full rounded shadow-2xl"
-                style={{ maxHeight: "75vh", objectFit: "cover" }}
-            />
+                ) : (
+                    <img
+                        src={project.img}
+                        alt={project.title}
+                        className="w-full rounded shadow-2xl"
+                        style={{ maxHeight: "75vh", objectFit: "cover" }}
+                    />
                 )}
 
-            <div className="flex justify-between items-end mt-6">
+                <div className="flex justify-between items-end mt-6">
 
-                <div>
-                    <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "var(--muted-foreground)", textTransform: "uppercase" }}>
-                        {project.category}
-                    </span>
-                    <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 400, color: "var(--foreground)", fontStyle: "italic", marginTop: 4 }}>
-                        {project.title}
-                    </h2>
-                </div>
-                <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-foreground)", textAlign: "right", lineHeight: 2 }}>
-                    <div>{project.meta.camera}</div>
-                    <div>{project.meta.aperture} · {project.meta.speed} · ISO {project.meta.iso}</div>
+                    <div>
+                        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "var(--muted-foreground)", textTransform: "uppercase" }}>
+                            {project.category}
+                        </span>
+                        <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 400, color: "var(--foreground)", fontStyle: "italic", marginTop: 4 }}>
+                            {project.title}
+                        </h2>
+                    </div>
+                    <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-foreground)", textAlign: "right", lineHeight: 2 }}>
+                        <div>{project.meta.camera}</div>
+                        <div>{project.meta.aperture} · {project.meta.speed} · ISO {project.meta.iso}</div>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
         </div >
