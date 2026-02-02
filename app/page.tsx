@@ -1,64 +1,119 @@
-import Image from "next/image";
+"use client";
+import React, { useState, useEffect, useCallback } from "react";
+import Navigation from "./components/Navigation";
+import ProjectHero from "./components/ProjectHero";
+import ImageCard from "./components/ImageCard";
+import Lightbox from "./components/Lightbox";
+import PageTransition from "./components/PageTransition";
+import Footer from "./components/Footer";
+import AboutModal from "./components/AboutModal";
+import { ProjectData } from "./types";
+
+const PROJECTS: ProjectData[] = [
+  { id: 1, title: "Midnight Drift", category: "Automotive", span: "large", img: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1200&q=85", meta: { camera: "Sony A7IV", iso: "800", aperture: "f/2.8", speed: "1/125s" } },
+  { id: 2, title: "Coastal Fragments", category: "Travel", span: "tall", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=85", meta: { camera: "Fuji X-T5", iso: "200", aperture: "f/8", speed: "1/500s" } },
+  { id: 3, title: "Carbon Heritage", category: "Automotive", span: "medium", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=85", meta: { camera: "Canon R5", iso: "400", aperture: "f/4", speed: "1/250s" } },
+  { id: 4, title: "The Quiet Temple", category: "Travel", span: "wide", img: "https://images.unsplash.com/photo-1528164344705-47542687000d?w=1200&q=85", meta: { camera: "Sony A7IV", iso: "100", aperture: "f/11", speed: "1/60s" } },
+  { id: 5, title: "Velocity", category: "Automotive", span: "medium", img: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=85", meta: { camera: "Nikon Z8", iso: "1600", aperture: "f/2", speed: "1/1000s" } },
+  { id: 6, title: "Monsoon Passage", category: "Travel", span: "large", img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=85", meta: { camera: "Fuji X-T5", iso: "400", aperture: "f/5.6", speed: "1/320s" } },
+  { id: 7, title: "Twin Turbo", category: "Automotive", span: "tall", img: "https://images.unsplash.com/photo-1614162118012-f3291e9d3eb4?w=800&q=85", meta: { camera: "Sony A1", iso: "3200", aperture: "f/1.8", speed: "1/2000s" } },
+  { id: 8, title: "Desert Atlas", category: "Travel", span: "medium", img: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=85", meta: { camera: "Hasselblad X2D", iso: "64", aperture: "f/16", speed: "1/30s" } },
+  { id: 9, title: "Street Souls", category: "Portraits", span: "tall", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85", meta: { camera: "Sony A7IV", iso: "400", aperture: "f/1.4", speed: "1/200s" } },
+  { id: 10, title: "Neon Nights", category: "Events", span: "large", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=85", meta: { camera: "Canon R5", iso: "1600", aperture: "f/2.8", speed: "1/100s" } },
+  { id: 11, title: "Urban Flow", category: "Short Films", span: "wide", img: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200&q=85", meta: { camera: "RED Komodo", iso: "800", aperture: "T2.0", speed: "24fps" } },
+  { id: 12, title: "Studio Gaze", category: "Portraits", span: "medium", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=85", meta: { camera: "Hasselblad X2D", iso: "100", aperture: "f/2.8", speed: "1/160s" } },
+];
+
+const NOISE_SVG = `data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E`;
 
 export default function Home() {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [transitioning, setTransitioning] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const switchCategory = useCallback((cat: string) => {
+    if (cat === activeCategory) return;
+    setTransitioning(true);
+    setTimeout(() => {
+      setActiveCategory(cat);
+      setTimeout(() => setTransitioning(false), 100);
+    }, 450);
+  }, [activeCategory]);
+
+  const filtered = activeCategory === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === activeCategory);
+  const projectCount = filtered.length;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex min-h-screen">
+      {/* Noise overlay */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          zIndex: 9990,
+          backgroundImage: `url("${NOISE_SVG}")`,
+          backgroundSize: "128px 128px",
+          opacity: 0.035,
+          animation: "grainShift 0.5s steps(4) infinite",
+          mixBlendMode: "overlay",
+        }}
+      />
+
+      <PageTransition active={transitioning} />
+      {selectedProject && <Lightbox project={selectedProject} onClose={() => setSelectedProject(null)} />}
+      {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
+
+      <Navigation activeCategory={activeCategory} onCategoryChange={switchCategory} onAboutClick={() => setAboutOpen(true)} mounted={mounted} />
+
+      <main className="flex-1 overflow-y-auto min-h-screen">
+        <ProjectHero activeCategory={activeCategory} projectCount={projectCount} mounted={mounted} />
+
+        {/* Category pills (mobile) */}
+        <div className="flex md:hidden gap-3 px-6 py-4 overflow-x-auto" style={{ borderBottom: "1px solid var(--border)" }}>
+          {["All", "Projects", "Automotive", "Travel", "Portraits", "Events", "Short Films"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => switchCategory(cat)}
+              style={{
+                fontFamily: "var(--font-jetbrains-mono), monospace",
+                fontSize: 10,
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                padding: "8px 16px",
+                borderRadius: 20,
+                border: `1px solid ${activeCategory === cat ? "var(--muted-foreground)" : "var(--border)"}`,
+                background: activeCategory === cat ? "var(--border)" : "transparent",
+                color: activeCategory === cat ? "var(--foreground)" : "var(--muted-foreground)",
+                cursor: "none",
+                whiteSpace: "nowrap",
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              {cat}
+            </button>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        {/* Editorial Grid */}
+        <section
+          className="grid grid-cols-12 gap-3 md:gap-4"
+          style={{
+            padding: "clamp(16px, 3vw, 40px)",
+            opacity: transitioning ? 0 : 1,
+            transform: transitioning ? "translateY(20px)" : "translateY(0)",
+            transition: "all 0.4s cubic-bezier(.22,1,.36,1)",
+          }}
+        >
+          {filtered.map((project, i) => (
+            <ImageCard key={project.id} project={project} index={i} onSelect={setSelectedProject} />
+          ))}
+        </section>
+
+        <Footer />
       </main>
     </div>
   );
