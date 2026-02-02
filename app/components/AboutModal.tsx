@@ -32,33 +32,50 @@ export default function AboutModal({ onClose }: AboutModalProps) {
             onClick={handleClose}
         >
             <div
-                className="relative max-w-2xl w-full mx-4"
+                className="relative w-full max-w-6xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-8 md:gap-16 lg:gap-24"
                 style={{
                     opacity: visible ? 1 : 0,
-                    transform: visible ? "translateY(0)" : "translateY(40px)",
+                    transform: visible ? "translateY(0)" : "translateY(20px)",
                     transition: "all 0.8s cubic-bezier(.22,1,.36,1) 0.3s",
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "var(--muted-foreground)", textTransform: "uppercase", display: "block", marginBottom: 24 }}>
-                    About
-                </span>
-                <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400, color: "var(--foreground)", fontStyle: "italic", marginBottom: 32, lineHeight: 1.1 }}>
-                    Ansh Goswami is a visual storyteller based in India.
-                </h2>
-                <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 12, lineHeight: 1.8, color: "var(--muted-foreground)", display: "flex", flexDirection: "column", gap: 16 }}>
-                    <p>
-                        Specializing in automotive and travel photography, my work explores the intersection of speed, silence, and the human condition.
-                    </p>
-                    <p>
-                        With a background in cinematic direction, I bring a narrative approach to every frame, ensuring that even static images convey a sense of motion and story.
-                    </p>
+                {/* Image Section */}
+                <div className="w-full md:w-5/12 aspect-[3/4] relative overflow-hidden bg-neutral-900 shadow-2xl">
+                    <img
+                        src="https://images.unsplash.com/photo-1618085222100-84f9fd6f6d6c?q=80&w=2000&auto=format&fit=crop"
+                        alt="Ansh Goswami"
+                        className="w-full h-full object-cover opacity-90 grayscale hover:grayscale-0 transition-all duration-700"
+                    />
                 </div>
 
-                <div style={{ marginTop: 48, display: "flex", gap: 32 }}>
-                    {["Instagram", "Behance", "Email"].map((l) => (
-                        <span key={l} className="sidebar-link" style={{ cursor: "pointer", textTransform: "uppercase", fontSize: 11, letterSpacing: "0.1em" }}>{l}</span>
-                    ))}
+                {/* Text Section */}
+                <div className="w-full md:w-6/12 flex flex-col justify-center text-center md:text-right space-y-8">
+                    <p style={{
+                        fontFamily: "var(--font-playfair-display), Georgia, serif",
+                        fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+                        fontWeight: 400,
+                        color: "var(--foreground)",
+                        lineHeight: 1.6
+                    }}>
+                        '99 born, Baltimore-based photographer who pushes the boundaries of photography through unique perspectives and creative editing techniques.
+                    </p>
+                    <p style={{
+                        fontFamily: "var(--font-playfair-display), Georgia, serif",
+                        fontSize: "clamp(1.2rem, 2vw, 1.8rem)",
+                        fontWeight: 400,
+                        color: "var(--muted-foreground)",
+                        lineHeight: 1.6
+                    }}>
+                        Specializing in automotive and portrait photography. I believe that anything that moves people is art, my work is bound to illuminating life through my lens.
+                    </p>
+
+                    {/* Links */}
+                    <div className="flex justify-center md:justify-end gap-8 pt-4">
+                        <a href="https://www.instagram.com/anshgo.jpeg?igsh=MXE3cDZqcm1xNmZnMA==" target="_blank" rel="noopener noreferrer" className="sidebar-link" style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase" }}>Instagram</a>
+                        <a href="#" className="sidebar-link" style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase" }}>Behance</a>
+                        <a href="mailto:hello@anshgo.com" className="sidebar-link" style={{ fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase" }}>Email</a>
+                    </div>
                 </div>
             </div>
 
