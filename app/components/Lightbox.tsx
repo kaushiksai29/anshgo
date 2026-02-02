@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ProjectData } from "../types";
+import dynamic from "next/dynamic";
+
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 
 interface LightboxProps {
     project: ProjectData;
@@ -103,6 +106,8 @@ export default function Lightbox({ project, onClose, onNext, onPrev, hasNext, ha
                 <div />
             </div>
 
+
+
             <div
                 className="relative max-w-5xl w-full mx-4 md:mx-8"
                 style={{
@@ -112,29 +117,47 @@ export default function Lightbox({ project, onClose, onNext, onPrev, hasNext, ha
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <img
-                    src={project.img}
-                    alt={project.title}
-                    className="w-full rounded shadow-2xl"
-                    style={{ maxHeight: "75vh", objectFit: "cover" }}
-                />
-                <div className="flex justify-between items-end mt-6">
-                    <div>
-                        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "var(--muted-foreground)", textTransform: "uppercase" }}>
-                            {project.category}
-                        </span>
-                        <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 400, color: "var(--foreground)", fontStyle: "italic", marginTop: 4 }}>
-                            {project.title}
-                        </h2>
+                {project.videoUrl ? (
+                    <ReactPlayer
+                        url={project.videoUrl}
+                        width="100%"
+                        height="100%"
+                        controls
+                        playing
+                        config={{
+                            file: {
+                                forceHLS: true,
+                            }
+                        } as any}
+                    />
                     </div>
-                    <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-foreground)", textAlign: "right", lineHeight: 2 }}>
-                        <div>{project.meta.camera}</div>
-                        <div>{project.meta.aperture} · {project.meta.speed} · ISO {project.meta.iso}</div>
-                    </div>
+            ) : (
+            <img
+                src={project.img}
+                alt={project.title}
+                className="w-full rounded shadow-2xl"
+                style={{ maxHeight: "75vh", objectFit: "cover" }}
+            />
+                )}
+
+            <div className="flex justify-between items-end mt-6">
+
+                <div>
+                    <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "var(--muted-foreground)", textTransform: "uppercase" }}>
+                        {project.category}
+                    </span>
+                    <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 400, color: "var(--foreground)", fontStyle: "italic", marginTop: 4 }}>
+                        {project.title}
+                    </h2>
+                </div>
+                <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-foreground)", textAlign: "right", lineHeight: 2 }}>
+                    <div>{project.meta.camera}</div>
+                    <div>{project.meta.aperture} · {project.meta.speed} · ISO {project.meta.iso}</div>
                 </div>
             </div>
-
-
         </div>
+
+
+        </div >
     );
 }

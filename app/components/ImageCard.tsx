@@ -13,6 +13,7 @@ export interface ProjectData {
         aperture: string;
         speed: string;
     };
+    videoUrl?: string;
 }
 
 interface ImageCardProps {
