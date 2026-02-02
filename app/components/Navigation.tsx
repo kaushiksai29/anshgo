@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ThemeToggle } from "./ThemeToggle";
+import { ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
 
 const CATEGORIES = ["All", "Projects", "Automotive", "Travel", "Portraits", "Events", "Short Films"];
 
@@ -9,9 +10,11 @@ interface NavigationProps {
     onCategoryChange: (cat: string) => void;
     onAboutClick: () => void;
     mounted: boolean;
+    collapsed: boolean;
+    onToggleCollapse: () => void;
 }
 
-export default function Navigation({ activeCategory, onCategoryChange, onAboutClick, mounted }: NavigationProps) {
+export default function Navigation({ activeCategory, onCategoryChange, onAboutClick, mounted, collapsed, onToggleCollapse }: NavigationProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
@@ -31,17 +34,27 @@ export default function Navigation({ activeCategory, onCategoryChange, onAboutCl
             <aside
                 className={`fixed md:sticky top-0 left-0 h-screen flex flex-col justify-between py-10 px-8 z-40 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
                 style={{
-                    width: "clamp(220px, 18vw, 280px)",
+                    width: collapsed ? "80px" : "clamp(220px, 18vw, 280px)",
                     borderRight: "1px solid var(--border)",
                     background: "var(--background)",
-                    transition: "transform 0.5s cubic-bezier(.22,1,.36,1)",
+                    transition: "width 0.5s cubic-bezier(.22,1,.36,1), transform 0.5s cubic-bezier(.22,1,.36,1)",
                     opacity: mounted ? 1 : 0,
                     animation: mounted ? "fadeInUp 1s cubic-bezier(.22,1,.36,1) forwards" : "none",
+                    overflow: "hidden",
                 }}
             >
-                <div>
+                {/* Desktop Collapse Toggle */}
+                <button
+                    onClick={onToggleCollapse}
+                    className="hidden md:flex absolute top-1/2 -right-3 w-6 h-12 bg-background border border-border items-center justify-center rounded-l-md z-50 hover:bg-muted transition-colors"
+                    style={{ transform: 'translateY(-50%)' }}
+                >
+                    {collapsed ? <ChevronRight size={14} className="text-foreground" /> : <ChevronLeft size={14} className="text-foreground" />}
+                </button>
+
+                <div style={{ opacity: collapsed ? 0 : 1, transition: "opacity 0.3s", pointerEvents: collapsed ? "none" : "auto" }}>
                     {/* Logo / Name */}
-                    <div style={{ marginBottom: 64 }}>
+                    <div style={{ marginBottom: 64, whiteSpace: "nowrap" }}>
                         <div style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1rem, 1.6vw, 1.3rem)", fontWeight: 700, letterSpacing: "0.04em", lineHeight: 1.2 }}>
                             ANSH
                         </div>
@@ -104,7 +117,7 @@ export default function Navigation({ activeCategory, onCategoryChange, onAboutCl
                 </div>
 
                 {/* Bottom metadata */}
-                <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 9, letterSpacing: "0.15em", color: "var(--muted-foreground)", lineHeight: 2.2 }}>
+                <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 9, letterSpacing: "0.15em", color: "var(--muted-foreground)", lineHeight: 2.2, opacity: collapsed ? 0 : 1, transition: "opacity 0.3s" }}>
                     <div>BASED IN INDIA</div>
                     <div>PORTFOLIO © {new Date().getFullYear()}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>

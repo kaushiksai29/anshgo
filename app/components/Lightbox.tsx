@@ -5,17 +5,25 @@ import { ProjectData } from "../types";
 interface LightboxProps {
     project: ProjectData;
     onClose: () => void;
+    onNext?: () => void;
+    onPrev?: () => void;
+    hasNext?: boolean;
+    hasPrev?: boolean;
 }
 
-export default function Lightbox({ project, onClose }: LightboxProps) {
+export default function Lightbox({ project, onClose, onNext, onPrev, hasNext, hasPrev }: LightboxProps) {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         requestAnimationFrame(() => setVisible(true));
-        const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") handleClose();
+            if (e.key === "ArrowRight" && onNext) onNext();
+            if (e.key === "ArrowLeft" && onPrev) onPrev();
+        };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, []);
+    }, [onNext, onPrev]);
 
     const handleClose = () => {
         setVisible(false);
@@ -50,6 +58,51 @@ export default function Lightbox({ project, onClose }: LightboxProps) {
                 />
             ))}
 
+
+            {/* Controls Layer */}
+            <div className="fixed inset-0 z-[10005] pointer-events-none p-4 md:p-10 flex flex-col justify-between">
+                {/* Top Bar: Close */}
+                <div className="flex justify-end pointer-events-auto">
+                    <button
+                        onClick={handleClose}
+                        className="group flex flex-col items-center justify-center p-2 hover:opacity-70 transition-opacity"
+                    >
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground">
+                            <line x1="10" y1="10" x2="30" y2="30" />
+                            <line x1="30" y1="10" x2="10" y2="30" />
+                        </svg>
+                        <span style={{ fontSize: 9, letterSpacing: "0.2em", marginTop: 4, color: "var(--foreground)" }}>CLOSE</span>
+                    </button>
+                </div>
+
+                {/* Middle: Navigation */}
+                <div className="flex justify-between items-center w-full absolute top-1/2 left-0 right-0 px-4 md:px-8 transform -translate-y-1/2">
+                    {/* Prev */}
+                    <div className="pointer-events-auto">
+                        {hasPrev && (
+                            <button onClick={(e) => { e.stopPropagation(); onPrev?.(); }} className="p-4 hover:scale-110 transition-transform text-foreground">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5">
+                                    <path d="M15 18l-6-6 6-6" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+                    {/* Next */}
+                    <div className="pointer-events-auto">
+                        {hasNext && (
+                            <button onClick={(e) => { e.stopPropagation(); onNext?.(); }} className="p-4 hover:scale-110 transition-transform text-foreground">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5">
+                                    <path d="M9 18l6-6-6-6" />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Bottom Spacer */}
+                <div />
+            </div>
+
             <div
                 className="relative max-w-5xl w-full mx-4 md:mx-8"
                 style={{
@@ -62,41 +115,26 @@ export default function Lightbox({ project, onClose }: LightboxProps) {
                 <img
                     src={project.img}
                     alt={project.title}
-                    className="w-full rounded"
+                    className="w-full rounded shadow-2xl"
                     style={{ maxHeight: "75vh", objectFit: "cover" }}
                 />
                 <div className="flex justify-between items-end mt-6">
                     <div>
-                        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "rgba(245,245,245,0.4)", textTransform: "uppercase" }}>
+                        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "var(--muted-foreground)", textTransform: "uppercase" }}>
                             {project.category}
                         </span>
-                        <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 400, color: "#F5F5F5", fontStyle: "italic", marginTop: 4 }}>
+                        <h2 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.5rem, 3vw, 2.8rem)", fontWeight: 400, color: "var(--foreground)", fontStyle: "italic", marginTop: 4 }}>
                             {project.title}
                         </h2>
                     </div>
-                    <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.1em", color: "rgba(245,245,245,0.4)", textAlign: "right", lineHeight: 2 }}>
+                    <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-foreground)", textAlign: "right", lineHeight: 2 }}>
                         <div>{project.meta.camera}</div>
                         <div>{project.meta.aperture} · {project.meta.speed} · ISO {project.meta.iso}</div>
                     </div>
                 </div>
             </div>
 
-            {/* Close hint */}
-            <div
-                className="fixed top-8 right-8"
-                style={{
-                    fontFamily: "var(--font-jetbrains-mono), monospace",
-                    fontSize: 10,
-                    letterSpacing: "0.2em",
-                    color: "rgba(245,245,245,0.3)",
-                    opacity: visible ? 1 : 0,
-                    transition: "opacity 0.6s 0.8s",
-                    cursor: "pointer",
-                }}
-                onClick={handleClose}
-            >
-                [ESC] CLOSE
-            </div>
+
         </div>
     );
 }

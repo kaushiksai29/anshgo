@@ -24,7 +24,7 @@ const PROJECTS: ProjectData[] = [
   { id: 12, title: "Studio Gaze", category: "Portraits", span: "medium", img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=85", meta: { camera: "Hasselblad X2D", iso: "100", aperture: "f/2.8", speed: "1/160s" } },
 ];
 
-const NOISE_SVG = `data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E`;
+const NOISE_SVG = `data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E`;
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -32,6 +32,8 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -58,19 +60,46 @@ export default function Home() {
           zIndex: 9990,
           backgroundImage: `url("${NOISE_SVG}")`,
           backgroundSize: "128px 128px",
-          opacity: 0.035,
+          opacity: "var(--texture-opacity)",
           animation: "grainShift 0.5s steps(4) infinite",
           mixBlendMode: "overlay",
         }}
       />
 
       <PageTransition active={transitioning} />
-      {selectedProject && <Lightbox project={selectedProject} onClose={() => setSelectedProject(null)} />}
+      {selectedProject && (
+        <Lightbox
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+          hasNext={filtered.length > 1}
+          hasPrev={filtered.length > 1}
+          onNext={() => {
+            const idx = filtered.findIndex(p => p.id === selectedProject.id);
+            const nextIdx = (idx + 1) % filtered.length;
+            setSelectedProject(filtered[nextIdx]);
+          }}
+          onPrev={() => {
+            const idx = filtered.findIndex(p => p.id === selectedProject.id);
+            const prevIdx = (idx - 1 + filtered.length) % filtered.length;
+            setSelectedProject(filtered[prevIdx]);
+          }}
+        />
+      )}
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
 
-      <Navigation activeCategory={activeCategory} onCategoryChange={switchCategory} onAboutClick={() => setAboutOpen(true)} mounted={mounted} />
+      <Navigation
+        activeCategory={activeCategory}
+        onCategoryChange={switchCategory}
+        onAboutClick={() => setAboutOpen(true)}
+        mounted={mounted}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+      />
 
-      <main className="flex-1 overflow-y-auto min-h-screen">
+      <main
+        className="flex-1 overflow-y-auto min-h-screen transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{ marginLeft: sidebarCollapsed ? 0 : 0 }}
+      >
         <ProjectHero activeCategory={activeCategory} projectCount={projectCount} mounted={mounted} />
 
         {/* Category pills (mobile) */}
