@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import Navigation from "./components/Navigation";
-import ProjectHero from "./components/ProjectHero";
 import ImageCard from "./components/ImageCard";
+import CategoryTile from "./components/CategoryTile";
 import Lightbox from "./components/Lightbox";
 import PageTransition from "./components/PageTransition";
 import Footer from "./components/Footer";
@@ -11,6 +11,16 @@ import { ProjectData } from "./types";
 import { PROJECTS } from "./data/projects";
 
 const NOISE_SVG = `data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E`;
+
+// Representative thumbnail for each category on the "All" landing page
+const CATEGORY_TILES = [
+  { category: "Projects", thumbnail: "/media/projects/16328f81-2974-48f2-ba27-bff7c2d9b900_rw_1920.jpg" },
+  { category: "Automotive", thumbnail: "/media/automotive/01e4aaab-598d-4cab-b7cd-3e9c6d608b2c_rw_600.jpg" },
+  { category: "Travel", thumbnail: "/media/travel/88378ff7-33e7-48a0-9ba3-b143ba86fb14_rw_3840.JPG" },
+  { category: "Portraits", thumbnail: "/media/portraits/315a68aa-0a47-45a2-8426-ecc842c4e1df_rw_3840.jpg" },
+  { category: "Events", thumbnail: "/media/events/59c24bb4-2274-4dfb-afac-5a5bffed3969_rw_3840.jpg" },
+  { category: "Short Films", thumbnail: "/media/automotive/049d9a69-6761-493c-a471-443ba36747ce_rw_600.jpg" },
+];
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -34,8 +44,9 @@ export default function Home() {
     }, 450);
   }, [activeCategory]);
 
-  const filtered = activeCategory === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === activeCategory);
-  const projectCount = filtered.length;
+  const isAllView = activeCategory === "All";
+  const filtered = isAllView ? [] : PROJECTS.filter((p) => p.category === activeCategory);
+  const projectCount = isAllView ? CATEGORY_TILES.length : filtered.length;
 
   return (
     <div className="flex min-h-screen">
@@ -86,7 +97,6 @@ export default function Home() {
         className="flex-1 overflow-y-auto min-h-screen transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{ marginLeft: sidebarCollapsed ? 0 : 0 }}
       >
-        <ProjectHero activeCategory={activeCategory} projectCount={projectCount} mounted={mounted} />
 
         {/* Category pills (mobile) */}
         <div className="flex md:hidden gap-3 px-6 py-4 overflow-x-auto" style={{ borderBottom: "1px solid var(--border)" }}>
@@ -113,7 +123,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Editorial Grid */}
+        {/* Grid */}
         <section
           className="grid grid-cols-12 gap-3 md:gap-4"
           style={{
@@ -123,9 +133,20 @@ export default function Home() {
             transition: "all 0.4s cubic-bezier(.22,1,.36,1)",
           }}
         >
-          {filtered.map((project, i) => (
-            <ImageCard key={project.id} project={project} index={i} onSelect={setSelectedProject} />
-          ))}
+          {isAllView
+            ? CATEGORY_TILES.map((tile, i) => (
+              <CategoryTile
+                key={tile.category}
+                category={tile.category}
+                thumbnail={tile.thumbnail}
+                index={i}
+                onClick={() => switchCategory(tile.category)}
+              />
+            ))
+            : filtered.map((project, i) => (
+              <ImageCard key={project.id} project={project} index={i} onSelect={setSelectedProject} />
+            ))
+          }
         </section>
 
         <Footer />
