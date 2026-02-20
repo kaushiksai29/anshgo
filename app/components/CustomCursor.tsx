@@ -39,10 +39,10 @@ export default function CustomCursor() {
             pos.current.x = lerp(pos.current.x, target.current.x, 0.15);
             pos.current.y = lerp(pos.current.y, target.current.y, 0.15);
             if (dotRef.current) {
-                dotRef.current.style.transform = `translate(${target.current.x - 4}px, ${target.current.y - 4}px)`;
+                dotRef.current.style.transform = `translate(${target.current.x - 2.5}px, ${target.current.y - 2.5}px)`;
             }
             if (ringRef.current) {
-                const s = hovering.current ? 80 : 24;
+                const s = hovering.current ? 48 : 16;
                 ringRef.current.style.transform = `translate(${pos.current.x - s / 2}px, ${pos.current.y - s / 2}px)`;
                 ringRef.current.style.width = `${s}px`;
                 ringRef.current.style.height = `${s}px`;
@@ -73,9 +73,9 @@ export default function CustomCursor() {
 
     return (
         <>
-            <div ref={dotRef} style={{ position: "fixed", top: 0, left: 0, width: 8, height: 8, borderRadius: "50%", background: "#F5F5F5", pointerEvents: "none", zIndex: 9999, mixBlendMode: "difference", transition: "none" }} />
-            <div ref={ringRef} style={{ position: "fixed", top: 0, left: 0, width: 24, height: 24, borderRadius: "50%", border: "1px solid rgba(245,245,245,0.4)", pointerEvents: "none", zIndex: 9998, transition: "width 0.4s cubic-bezier(.22,1,.36,1), height 0.4s cubic-bezier(.22,1,.36,1), opacity 0.3s, background 0.3s", mixBlendMode: "difference" }} />
-            <div ref={labelRef} style={{ position: "fixed", top: 0, left: 0, width: 80, textAlign: "center", pointerEvents: "none", zIndex: 9999, fontSize: 10, letterSpacing: "0.2em", fontFamily: "var(--font-jetbrains-mono), monospace", color: "#F5F5F5", mixBlendMode: "difference", transition: "opacity 0.3s" }}>
+            <div ref={dotRef} style={{ position: "fixed", top: 0, left: 0, width: 5, height: 5, borderRadius: "50%", background: "#F5F5F5", pointerEvents: "none", zIndex: 9999, mixBlendMode: "difference", transition: "none" }} />
+            <div ref={ringRef} style={{ position: "fixed", top: 0, left: 0, width: 16, height: 16, borderRadius: "50%", border: "1px solid rgba(245,245,245,0.3)", pointerEvents: "none", zIndex: 9998, transition: "width 0.4s cubic-bezier(.22,1,.36,1), height 0.4s cubic-bezier(.22,1,.36,1), opacity 0.3s, background 0.3s", mixBlendMode: "difference" }} />
+            <div ref={labelRef} style={{ position: "fixed", top: 0, left: 0, width: 80, textAlign: "center", pointerEvents: "none", zIndex: 9999, fontSize: 9, letterSpacing: "0.15em", fontFamily: "var(--font-jetbrains-mono), monospace", color: "#F5F5F5", mixBlendMode: "difference", transition: "opacity 0.3s" }}>
                 VIEW
             </div>
         </>

@@ -83,46 +83,8 @@ export default function ImageCard({ project, index, onSelect }: ImageCardProps) 
                     loading="lazy"
                 />
 
-                {/* Gradient overlay */}
-                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(18,18,18,0.7) 0%, transparent 50%)" }} />
-
-                {/* Title overlay */}
-                <div
-                    className="absolute bottom-0 left-0 right-0 p-5 md:p-8"
-                    style={{
-                        transform: hovered ? "translateY(0)" : "translateY(8px)",
-                        opacity: revealed ? 1 : 0,
-                        transition: "transform 0.6s cubic-bezier(.22,1,.36,1), opacity 0.6s ease",
-                        transitionDelay: `${parseFloat(delay) + 0.3}s`,
-                    }}
-                >
-                    <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, letterSpacing: "0.25em", color: "rgba(245,245,245,0.5)", textTransform: "uppercase" }}>
-                        {project.category} — {String(project.id).padStart(2, "0")}
-                    </span>
-                    <h3 style={{ fontFamily: "var(--font-playfair-display), Georgia, serif", fontSize: "clamp(1.2rem, 2.5vw, 2rem)", fontWeight: 400, color: "#F5F5F5", marginTop: 4, lineHeight: 1.15, fontStyle: "italic" }}>
-                        {project.title}
-                    </h3>
-                </div>
-
-                {/* EXIF metadata on hover */}
-                <div
-                    className="absolute top-4 right-4"
-                    style={{
-                        opacity: hovered ? 1 : 0,
-                        transform: hovered ? "translateY(0)" : "translateY(-8px)",
-                        transition: "all 0.5s cubic-bezier(.22,1,.36,1)",
-                        fontFamily: "var(--font-jetbrains-mono), monospace",
-                        fontSize: 9,
-                        letterSpacing: "0.12em",
-                        color: "rgba(245,245,245,0.6)",
-                        textAlign: "right",
-                        lineHeight: 1.8,
-                    }}
-                >
-                    <div>{project.meta.camera}</div>
-                    <div>{project.meta.aperture} · {project.meta.speed}</div>
-                    <div>ISO {project.meta.iso}</div>
-                </div>
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0" style={{ background: "linear-gradient(0deg, rgba(18,18,18,0.3) 0%, transparent 40%)" }} />
             </div>
         </div>
     );
