@@ -123,7 +123,7 @@ export default function Navigation({ activeCategory, onCategoryChange, onAboutCl
 
                 {/* Bottom metadata */}
                 <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 9, letterSpacing: "0.15em", color: "var(--muted-foreground)", lineHeight: 2.2, opacity: collapsed ? 0 : 1, transition: "opacity 0.3s" }}>
-                    <div>BASED IN INDIA</div>
+                    <div>BASED IN BALTIMORE, MD</div>
                     <div>PORTFOLIO © {new Date().getFullYear()}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
                         <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#4ade80", animation: "pulseGlow 3s ease infinite", display: "inline-block" }} />
