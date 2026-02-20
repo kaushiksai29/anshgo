@@ -119,18 +119,10 @@ export default function Lightbox({ project, onClose, onNext, onPrev, hasNext, ha
             >
                 {project.videoUrl ? (
                     <div className="w-full aspect-video rounded overflow-hidden shadow-2xl relative bg-black">
-                        <ReactPlayer
-                            url={project.videoUrl}
-                            width="100%"
-                            height="100%"
-                            controls
-                            playing
-                            config={{
-                                file: {
-                                    forceHLS: true,
-                                }
-                            } as any}
-                        />
+                        {(() => {
+                            const Player = ReactPlayer as any;
+                            return <Player url={project.videoUrl} width="100%" height="100%" controls playing />;
+                        })()}
                     </div>
                 ) : (
                     <img

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { INSTAGRAM_URL } from "../data/projects";
 
 export default function Footer() {
     const [time, setTime] = useState("");
@@ -29,9 +30,17 @@ export default function Footer() {
             <div>ANSH GOSWAMI — {new Date().getFullYear()}</div>
             <div>LOCAL TIME {time}</div>
             <div className="flex gap-6">
-                {["Instagram", "Behance", "Email"].map((l) => (
-                    <span key={l} className="sidebar-link" style={{ cursor: "none", textTransform: "uppercase" }}>{l}</span>
-                ))}
+                <a
+                    href={INSTAGRAM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="sidebar-link"
+                    style={{ cursor: "none", textTransform: "uppercase", textDecoration: "none", color: "inherit" }}
+                >
+                    Instagram
+                </a>
+                <span className="sidebar-link" style={{ cursor: "none", textTransform: "uppercase" }}>Behance</span>
+                <span className="sidebar-link" style={{ cursor: "none", textTransform: "uppercase" }}>Email</span>
             </div>
         </footer>
     );

@@ -90,26 +90,31 @@ export default function Navigation({ activeCategory, onCategoryChange, onAboutCl
                         <div style={{ width: "100%", height: 1, background: "var(--border)", margin: "4px 0" }} />
                         <button
                             className="sidebar-link"
+                            onClick={() => { onAboutClick(); setSidebarOpen(false); }}
                             style={{
                                 background: "none", border: "none", textAlign: "left",
                                 fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 11,
                                 letterSpacing: "0.2em", textTransform: "uppercase",
-                                color: "rgba(245,245,245,0.3)", cursor: "none", padding: 0,
+                                color: "var(--muted-foreground)", cursor: "none", padding: 0,
                             }}
                         >
                             About
                         </button>
-                        <button
+                        <a
+                            href="https://www.instagram.com/anshgo.jpeg?igsh=MXE3cDZqcm1xNmZnMA%3D%3D"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="sidebar-link"
                             style={{
                                 background: "none", border: "none", textAlign: "left",
                                 fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 11,
                                 letterSpacing: "0.2em", textTransform: "uppercase",
-                                color: "rgba(245,245,245,0.3)", cursor: "none", padding: 0,
+                                color: "var(--muted-foreground)", cursor: "none", padding: 0,
+                                textDecoration: "none",
                             }}
                         >
                             Contact
-                        </button>
+                        </a>
                     </nav>
                     <div style={{ marginTop: 24 }}>
                         <ThemeToggle />

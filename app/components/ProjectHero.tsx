@@ -12,7 +12,7 @@ export default function ProjectHero({ activeCategory, projectCount, mounted }: P
             {/* Background image with overlay */}
             <div className="absolute inset-0 overflow-hidden">
                 <img
-                    src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1800&q=80"
+                    src="/media/automotive/01e4aaab-598d-4cab-b7cd-3e9c6d608b2c_rw_600.jpg"
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover"
                     style={{
@@ -21,7 +21,7 @@ export default function ProjectHero({ activeCategory, projectCount, mounted }: P
                         filter: "grayscale(40%)",
                     }}
                 />
-                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(18,18,18,0.4) 0%, #121212 95%)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(18,18,18,0.4) 0%, var(--background) 95%)" }} />
             </div>
 
             <div className="relative" style={{ maxWidth: 900 }}>
@@ -30,7 +30,7 @@ export default function ProjectHero({ activeCategory, projectCount, mounted }: P
                         fontFamily: "var(--font-jetbrains-mono), monospace",
                         fontSize: 10,
                         letterSpacing: "0.3em",
-                        color: "rgba(245,245,245,0.3)",
+                        color: "var(--muted-foreground)",
                         textTransform: "uppercase",
                         marginBottom: 16,
                         opacity: mounted ? 1 : 0,
@@ -61,7 +61,7 @@ export default function ProjectHero({ activeCategory, projectCount, mounted }: P
                     style={{
                         width: 48,
                         height: 1,
-                        background: "rgba(245,245,245,0.15)",
+                        background: "var(--border)",
                         marginTop: 32,
                         opacity: mounted ? 1 : 0,
                         transition: "opacity 1s 1.2s",
@@ -73,7 +73,7 @@ export default function ProjectHero({ activeCategory, projectCount, mounted }: P
                         fontSize: 11,
                         lineHeight: 1.8,
                         letterSpacing: "0.05em",
-                        color: "rgba(245,245,245,0.35)",
+                        color: "var(--muted-foreground)",
                         maxWidth: 440,
                         marginTop: 20,
                         opacity: mounted ? 1 : 0,
@@ -93,10 +93,10 @@ export default function ProjectHero({ activeCategory, projectCount, mounted }: P
                     transition: "opacity 1s 1.5s",
                 }}
             >
-                <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 9, letterSpacing: "0.2em", color: "rgba(245,245,245,0.2)", writingMode: "vertical-rl" }}>
+                <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 9, letterSpacing: "0.2em", color: "var(--muted-foreground)", writingMode: "vertical-rl" }}>
                     SCROLL
                 </span>
-                <div style={{ width: 1, height: 40, background: "linear-gradient(180deg, rgba(245,245,245,0.2), transparent)", animation: "pulseGlow 2s ease infinite" }} />
+                <div style={{ width: 1, height: 40, background: "linear-gradient(180deg, var(--muted-foreground), transparent)", animation: "pulseGlow 2s ease infinite" }} />
             </div>
         </header>
     );
