@@ -40,6 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-media/
+/media/
 raw_home.html
 reference_portfolio.jsx
