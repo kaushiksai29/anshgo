@@ -10,24 +10,32 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: master
       
-      - name: Find and extract zip files
+      - name: List root files
+        run: ls -la
+      
+      - name: Extract zip files
         run: |
           mkdir -p public/media
-          for zipfile in *.zip; do
-            if [ -f "$zipfile" ]; then
-              echo "Found: $zipfile"
-              unzip -o "$zipfile" -d public/
-              rm -f "$zipfile"
+          for f in m1.zip m2.zip m3.zip; do
+            if [ -f "$f" ]; then
+              echo "Extracting $f..."
+              unzip -o "$f" -d public/
+              rm "$f"
+            else
+              echo "MISSING: $f"
             fi
           done
+          ls -la public/media/
       
-      - name: Commit extracted images
+      - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -f public/media/
           git add -u
           git diff --cached --quiet && echo "No changes" && exit 0
-          git commit -m "Extract media images from zip files"
+          git commit -m "Extract media images"
           git push
