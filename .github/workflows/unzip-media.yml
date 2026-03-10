@@ -1,0 +1,33 @@
+name: Unzip Media Files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip-media:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Find and extract zip files
+        run: |
+          mkdir -p public/media
+          for zipfile in *.zip; do
+            if [ -f "$zipfile" ]; then
+              echo "Found: $zipfile"
+              unzip -o "$zipfile" -d public/
+              rm -f "$zipfile"
+            fi
+          done
+      
+      - name: Commit extracted images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f public/media/
+          git add -u
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Extract media images from zip files"
+          git push
